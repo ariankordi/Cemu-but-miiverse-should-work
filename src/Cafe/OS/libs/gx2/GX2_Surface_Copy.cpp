@@ -431,7 +431,7 @@ void gx2Export_GX2CopySurfaceEx(PPCInterpreter_t* hCPU)
 
 void gx2Export_GX2ResolveAAColorBuffer(PPCInterpreter_t* hCPU)
 {
-	debug_printf("GX2ResolveAAColorBuffer(0x%08x,0x%08x,%d,%d)\n", hCPU->gpr[3], hCPU->gpr[4], hCPU->gpr[5], hCPU->gpr[6]);
+	//debug_printf("GX2ResolveAAColorBuffer(0x%08x,0x%08x,%d,%d)\n", hCPU->gpr[3], hCPU->gpr[4], hCPU->gpr[5], hCPU->gpr[6]);
 	GX2ColorBuffer* srcColorBuffer = (GX2ColorBuffer*)memory_getPointerFromVirtualOffset(hCPU->gpr[3]);
 	GX2Surface* srcSurface = &srcColorBuffer->surface;
 	GX2Surface* dstSurface = (GX2Surface*)memory_getPointerFromVirtualOffset(hCPU->gpr[4]);
