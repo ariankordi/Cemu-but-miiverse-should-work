@@ -453,7 +453,7 @@ namespace coreinit
 
 	bool MPResetTaskQ(MPTaskQ* taskq)
 	{
-		debug_printf("MPResetTaskQ called\n");
+		//debug_printf("MPResetTaskQ called\n");
 		bool result = false;
 		AcquireMPQLock(); // OSUninterruptibleSpinLock_Acquire(&taskq->spinlock);
 		if (taskq->state == MP_TASKQ_STATE_DONE || taskq->state == MP_TASKQ_STATE_STOP) 
