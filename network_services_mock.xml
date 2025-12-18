@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<content>
+	<networkname>rose</networkname>
+	<disablesslverification>true</disablesslverification>
+	<urls>
+		<act>http://localhost:42069</act>
+		<ecs>https://ecs.wup.shop.pretendo.cc/ecs/services/ECommerceSOAP</ecs>
+		<nus>https://nus.c.shop.pretendo.cc/nus/services/NetUpdateSOAP</nus>
+		<ias>https://ias.c.shop.pretendo.cc/ias/services/IdentityAuthenticationSOAP</ias>
+		<ccsu>https://ccs.c.shop.pretendo.cc/ccs/download</ccsu>
+		<ccs>http://ccs.cdn.c.shop.pretendo.cc/ccs/download</ccs>
+		<idbe>https://idbe-wup.cdn.pretendo.cc/icondata</idbe>
+		<boss>https://npts.app.pretendo.cc/p01/tasksheet</boss>
+		<tagaya>https://tagaya.wup.shop.pretendo.cc/tagaya/versionlist</tagaya>
+		<olv>http://localhost:42069/v1/endpoint</olv>
+	</urls>
+</content>
