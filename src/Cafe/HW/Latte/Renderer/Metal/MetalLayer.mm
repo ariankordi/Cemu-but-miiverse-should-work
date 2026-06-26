@@ -18,16 +18,5 @@ void* CreateMetalLayer(void* handle, float& scaleX, float& scaleY)
 	scaleX = (float)(pixels.size.width / points.size.width);
     scaleY = (float)(pixels.size.height / points.size.height);
 
-	// Return the view itself so the caller can remove it from the hierarchy on shutdown.
-	return childView;
-}
-
-void* GetMetalLayerFromView(void* view)
-{
-	return ((MetalView*)view).layer;
-}
-
-void DestroyMetalLayer(void* view)
-{
-	[(MetalView*)view removeFromSuperview];
+	return childView.layer;
 }

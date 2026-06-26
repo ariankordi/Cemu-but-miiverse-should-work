@@ -24,7 +24,6 @@ public:
     CA::MetalDrawable* GetDrawable() const { return m_drawable; }
 
 private:
-    void* m_view = nullptr; ///< Opaque pointer to the MetalView NSView added as a subview of the canvas.
     CA::MetalLayer* m_layer = nullptr;
     float m_layerScaleX, m_layerScaleY;
 
