@@ -416,7 +416,19 @@ int CemuApp::OnExit()
 	}
 #endif
 	wxApp::OnExit();
+#if BOOST_OS_MACOS
+	// On macOS wxClipboard::Flush() asserts unless the clipboard is currently
+	// open (it does wxCHECK_MSG(m_open, ...)). The system pasteboard already
+	// persists data across app exit, so guard the flush behind a successful
+	// Open()/Close() to satisfy the precondition without tripping the assert.
+	if (wxTheClipboard->Open())
+	{
+		wxTheClipboard->Flush();
+		wxTheClipboard->Close();
+	}
+#else
 	wxTheClipboard->Flush();
+#endif
 	InputManager::instance().Shutdown();
 	int retValue = 0;
 	if (auto r = CafeSystem::GetForegroundTitleReturnStatus(); (LaunchSettings::GetLoadFile() || LaunchSettings::GetLoadTitleID()) && r)
