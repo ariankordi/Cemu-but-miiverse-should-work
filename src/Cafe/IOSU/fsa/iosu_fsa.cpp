@@ -92,6 +92,17 @@ namespace iosu
 				// in all other cases the path is relative to the working directory
 				tmp.assign(fsaClient->workingDirectory);
 			}
+
+			// ????????
+			if (fsaClient->workingDirectory == "/" && !input.starts_with("/vol"))
+			{
+				// game set working directory to just root????
+				// we are overriding this
+				debug_printf("FSA: Game set working directory to / but we will override it to the SD card (path: %s)\n", input.data());
+
+				tmp = "/vol/external01/";
+			}
+
 			// parse path
 			size_t idx = 0;
 			while (idx < input.size())

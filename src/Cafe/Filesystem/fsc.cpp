@@ -480,6 +480,9 @@ bool fsc_createDir(const char* path, sint32* fscStatus)
 		fscLeave();
 		return status;
 	}
+	// FFLUtility: enters this with path "/fflutility/database" ?????
+	// fscDevice == null, devicePath = "", workingDirectory = "/"
+	// uknParam = 60 06 00 00 (i guess 660? for permission?)
 	fscLeave();
 	return false;
 }
