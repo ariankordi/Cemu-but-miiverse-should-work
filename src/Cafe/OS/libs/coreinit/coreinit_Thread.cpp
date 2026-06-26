@@ -1331,7 +1331,9 @@ namespace coreinit
 		}
 
 		cemu_assert_debug(__OSHasSchedulerLock());	
+#ifndef __arm64__
 		cemu_assert_debug(g_isMulticoreMode == false || hostThread->selectedCore == t_assignedCoreIndex);
+#endif
 
 		// received next time slice, load self again
 		__OSLoadThread(hostThread->m_thread, &hostThread->ppcInstance, hostThread->selectedCore);
