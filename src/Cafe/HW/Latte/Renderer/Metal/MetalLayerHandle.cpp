@@ -7,7 +7,8 @@ MetalLayerHandle::MetalLayerHandle(MTL::Device* device, const Vector2i& size, bo
 {
     const auto& windowInfo = (mainWindow ? WindowSystem::GetWindowInfo().window_main : WindowSystem::GetWindowInfo().window_pad);
 
-    m_layer = (CA::MetalLayer*)CreateMetalLayer(windowInfo.surface, m_layerScaleX, m_layerScaleY);
+    m_view = CreateMetalLayer(windowInfo.surface, m_layerScaleX, m_layerScaleY);
+    m_layer = (CA::MetalLayer*)GetMetalLayerFromView(m_view);
     m_layer->setDevice(device);
     m_layer->setDrawableSize(CGSize{(float)size.x * m_layerScaleX, (float)size.y * m_layerScaleY});
     m_layer->setFramebufferOnly(true);
@@ -15,8 +16,11 @@ MetalLayerHandle::MetalLayerHandle(MTL::Device* device, const Vector2i& size, bo
 
 MetalLayerHandle::~MetalLayerHandle()
 {
-    if (m_layer)
-        m_layer->release();
+    // Remove the MetalView NSView from the window hierarchy. This lets AppKit
+    // properly release the view and its CAMetalLayer through normal ref-counting,
+    // preventing a dangling layer pointer during window teardown.
+    if (m_view)
+        DestroyMetalLayer(m_view);
 }
 
 void MetalLayerHandle::Resize(const Vector2i& size)
