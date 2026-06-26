@@ -3,20 +3,57 @@
 
 #include "gui/interface/WindowSystem.h"
 
+#include <utility> // for std::move.
+
 MetalLayerHandle::MetalLayerHandle(MTL::Device* device, const Vector2i& size, bool mainWindow)
 {
     const auto& windowInfo = (mainWindow ? WindowSystem::GetWindowInfo().window_main : WindowSystem::GetWindowInfo().window_pad);
 
-    m_layer = (CA::MetalLayer*)CreateMetalLayer(windowInfo.surface, m_layerScaleX, m_layerScaleY);
+    m_view = CreateMetalLayer(windowInfo.surface, m_layerScaleX, m_layerScaleY);
+    m_layer = static_cast<CA::MetalLayer*>(GetMetalLayerFromView(m_view));
     m_layer->setDevice(device);
     m_layer->setDrawableSize(CGSize{(float)size.x * m_layerScaleX, (float)size.y * m_layerScaleY});
     m_layer->setFramebufferOnly(true);
 }
 
+MetalLayerHandle::MetalLayerHandle(MetalLayerHandle&& other) noexcept
+{
+    *this = std::move(other);
+}
+
+MetalLayerHandle& MetalLayerHandle::operator=(MetalLayerHandle&& other) noexcept
+{
+    if (this == &other)
+        return *this;
+    // Release any resource we currently own before taking over the source's.
+    Reset();
+    m_view = other.m_view;
+    m_layer = other.m_layer;
+    m_layerScaleX = other.m_layerScaleX;
+    m_layerScaleY = other.m_layerScaleY;
+    m_drawable = other.m_drawable;
+    // Leave the source empty so its destructor does nothing.
+    other.m_view = nullptr;
+    other.m_layer = nullptr;
+    other.m_drawable = nullptr;
+    return *this;
+}
+
 MetalLayerHandle::~MetalLayerHandle()
 {
-    if (m_layer)
-        m_layer->release();
+    Reset();
+}
+
+void MetalLayerHandle::Reset()
+{
+    // Remove the MetalView NSView from the window hierarchy. This lets AppKit
+    // release the view and its CAMetalLayer through normal ref-counting,
+    // preventing a dangling layer pointer during window teardown.
+    if (m_view)
+        DestroyMetalLayer(m_view);
+    m_view = nullptr;
+    m_layer = nullptr;
+    m_drawable = nullptr;
 }
 
 void MetalLayerHandle::Resize(const Vector2i& size)
